@@ -19,11 +19,13 @@
 
 #ifndef LOGGER_LOGGER_H_
 #define LOGGER_LOGGER_H_
+
 #define FREEDOM
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include "util.h"
+#include <Tasks/projectTasks.h>
 #ifdef FREEDOM
 #include "fsl_debug_console.h"
 #endif

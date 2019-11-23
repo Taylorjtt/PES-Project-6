@@ -30,6 +30,13 @@
 #include "MKL25Z4.h"
 #include "LED/RGB.h"
 #include "Logger/logger.h"
+#include <math.h>
+#include <Tasks/projectTasks.h>
+#include "fsl_dac.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+
 
 #define RED_BASE GPIOB
 #define RED_PIN 18U
@@ -40,8 +47,15 @@
 #define BLUE_BASE GPIOD
 #define BLUE_PIN 1U
 
+#define RESOLUTION (3.3/4096)
+#define M_PI 3.14159265358979323846
+#define M_TWO_PI (2*M_PI)
+#define PERIOD 5.0f
+#define Y_OFFSET 2.0f
+
 extern LoggerHandle logger;
 extern RGBLEDHandle led;
+
 
 
 #endif /* PES_PROJECT_6_H_ */
