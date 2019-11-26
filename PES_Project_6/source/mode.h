@@ -8,7 +8,7 @@
 #ifndef MODE_H_
 #define MODE_H_
 
-#define DB
+//#define DB
 
 #define APPLICATION
 #endif /* MODE_H_ */

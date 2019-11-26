@@ -37,6 +37,9 @@
 #include "task.h"
 #include "queue.h"
 #include "fsl_adc16.h"
+#include "fsl_dma.h"
+#include "fsl_dmamux.h"
+#include "freertos/semphr.h"
 
 
 #define RED_BASE GPIOB
@@ -49,6 +52,7 @@
 #define BLUE_PIN 1U
 
 #define RESOLUTION (3.3/4096)
+
 #define M_PI 3.14159265358979323846
 #define M_TWO_PI (2*M_PI)
 #define PERIOD 5.0f
@@ -57,6 +61,10 @@
 #define DEMO_ADC16_BASE ADC0
 #define DEMO_ADC16_CHANNEL_GROUP 0U
 #define DEMO_ADC16_USER_CHANNEL 8u /*PTB0, ADC0_SE8 */
+
+#define BUFF_LENGTH 64
+#define DMA_CHANNEL 0
+#define DMA_SOURCE 63
 
 extern float floatWave[50];
 extern uint16_t intWave[50];
@@ -69,5 +77,10 @@ extern adc16_channel_config_t adc16ChannelConfigStruct;
 
 extern QueueHandle_t adcBuffer;
 extern QueueHandle_t dspBuffer;
-
+extern uint16_t buff[64];
+extern dma_handle_t g_DMA_Handle;
+extern dma_transfer_config_t transferConfig;
+extern SemaphoreHandle_t ledMutex;
+void DMA_Callback(dma_handle_t *handle, void *param);
+extern volatile bool g_Transfer_Done;
 #endif /* PES_PROJECT_6_H_ */
