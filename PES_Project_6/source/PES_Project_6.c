@@ -7,6 +7,12 @@
 
 LoggerHandle logger;
 RGBLEDHandle led;
+dac_config_t dacConfigStruct;
+adc16_config_t adc16ConfigStruct;
+adc16_channel_config_t adc16ChannelConfigStruct;
+
+QueueHandle_t adcBuffer;
+QueueHandle_t dspBuffer;
 
 int main(void) {
 
@@ -17,14 +23,43 @@ int main(void) {
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
 
-    dac_config_t dacConfigStruct;
+    /*
+     * setup DAC
+     */
     DAC_GetDefaultConfig(&dacConfigStruct);
     DAC_Init(DAC0, &dacConfigStruct);
     DAC_Enable(DAC0, true);             /* Enable output. */
     DAC_SetBufferReadPointer(DAC0, 0U);
 
-	//10hz
-	//SysTick_Config(4800000);
+    /*
+     * Setup ADC
+     */
+    ADC16_GetDefaultConfig(&adc16ConfigStruct);
+    ADC16_Init(DEMO_ADC16_BASE, &adc16ConfigStruct);
+    ADC16_EnableHardwareTrigger(DEMO_ADC16_BASE, false); /* Make sure the software trigger is used. */
+    if (kStatus_Success == ADC16_DoAutoCalibration(DEMO_ADC16_BASE))
+    {
+    	Logger_logString(logger,"ADC16_DoAutoCalibration() Done.\r\n","main", STATUS_LEVEL);
+    }
+    else
+    {
+    	Logger_logString(logger,"ADC16_DoAutoCalibration() Failed.\r\n","main", STATUS_LEVEL);
+    }
+    adc16ChannelConfigStruct.channelNumber = DEMO_ADC16_USER_CHANNEL;
+    adc16ChannelConfigStruct.enableInterruptOnConversionCompleted = false;
+
+    //create the ADC buffer
+    adcBuffer = xQueueCreate(64,sizeof(uint16_t));
+    if(adcBuffer != 0)
+    {
+    	Logger_logString(logger,"ADC Queue Created Successfully\r\n","main", STATUS_LEVEL);
+    }
+    else
+    {
+    	Logger_logString(logger,"Failed to create ADC Queue\r\n","main", STATUS_LEVEL);
+    }
+
+
 
 	led = malloc(sizeof(RGBLEDObject));
 	led = RGBLED_Constructor((void*) led, sizeof(RGBLEDObject), RED_BASE, RED_PIN, GREEN_BASE, GREEN_PIN, BLUE_BASE, BLUE_PIN);
@@ -45,8 +80,6 @@ int main(void) {
 	#endif
 	for(int i = 0; i < 50; i++)
 	{
-
-
 		floatWave[i] = sin(t*M_TWO_PI/PERIOD) + Y_OFFSET;
 
 		#ifdef DB
@@ -71,7 +104,12 @@ int main(void) {
 
 
 	xTaskCreate(updateTime,( portCHAR *)"update_time", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+
 	xTaskCreate(updateDAC,( portCHAR *)"update_dac", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+
+#ifdef APPLICATION
+	xTaskCreate(readADC,( portCHAR *)"read_adc", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+#endif
 	vTaskStartScheduler();
 
 	while(1)

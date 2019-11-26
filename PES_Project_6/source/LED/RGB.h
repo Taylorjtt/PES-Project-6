@@ -134,4 +134,5 @@ void RGBLED_set(RGBLEDHandle handle, bool red, bool green, bool blue);
 void RGBLED_printStatus(RGBLEDHandle handle, bool red, bool green, bool blue);
 
 bool RGBLED_isBlueOn(RGBLEDHandle handle);
+bool RGBLED_isGreenOn(RGBLEDHandle handle);
 #endif /* SRC_LED_RGB_H_ */

@@ -9,6 +9,6 @@
 #define MODE_H_
 
 #define DB
-#define TEST_SIN_WAVE
-//#define APPLICATION
+
+#define APPLICATION
 #endif /* MODE_H_ */

@@ -25,5 +25,6 @@
 
 void updateTime(void *p);
 void updateDAC(void *p);
+void readADC(void *p);
 
 #endif /* TASKS_PROJECTTASKS_H_ */

@@ -45,7 +45,6 @@ void updateTime(void *p)
 				}
 			}
 		}
-	//	PRINTF("%d:%d:%d.%d\n\r",time.hours,time.minutes,time.seconds,time.tenths);
 		vTaskDelay(100);
 	}
 }
@@ -54,7 +53,11 @@ void updateDAC(void *p)
 {
 	while(true)
 	{
+#ifdef APPLICATION
+		RGBLED_set(led, false, !RGBLED_isGreenOn(led),false );
+#else
 		RGBLED_set(led, false, false, !RGBLED_isBlueOn(led));
+#endif
 		DAC_SetBufferValue(DAC0, 0U, intWave[i++]);
 		if(i > 49)
 		{
@@ -64,6 +67,27 @@ void updateDAC(void *p)
 		Logger_logString(logger, "Updating DAC", "updateDAC", DEBUG_LEVEL);
 		PRINTF("X Value: %d\tY Value: %d\n\r",i,intWave[i - 1]);
 		#endif
+		vTaskDelay(100);
+	}
+
+}
+
+void readADC(void *p)
+{
+	while(true)
+	{
+        ADC16_SetChannelConfig(DEMO_ADC16_BASE, DEMO_ADC16_CHANNEL_GROUP, &adc16ChannelConfigStruct);
+        while (0U == (kADC16_ChannelConversionDoneFlag &
+                      ADC16_GetChannelStatusFlags(DEMO_ADC16_BASE, DEMO_ADC16_CHANNEL_GROUP)))
+        {
+        }
+        uint16_t value = ADC16_GetChannelConversionValue(DEMO_ADC16_BASE, DEMO_ADC16_CHANNEL_GROUP);
+
+        if(!xQueueSend(adcBuffer,(void *)&value,0) == pdTRUE)
+        {
+        	Logger_logString(logger, "Queue is Full", "readADC", STATUS_LEVEL);
+        }
+
 		vTaskDelay(100);
 	}
 

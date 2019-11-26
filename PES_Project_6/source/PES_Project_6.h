@@ -36,6 +36,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
+#include "fsl_adc16.h"
 
 
 #define RED_BASE GPIOB
@@ -52,12 +53,21 @@
 #define M_TWO_PI (2*M_PI)
 #define PERIOD 5.0f
 #define Y_OFFSET 2.0f
+
+#define DEMO_ADC16_BASE ADC0
+#define DEMO_ADC16_CHANNEL_GROUP 0U
+#define DEMO_ADC16_USER_CHANNEL 8u /*PTB0, ADC0_SE8 */
+
 extern float floatWave[50];
 extern uint16_t intWave[50];
 
 extern LoggerHandle logger;
 extern RGBLEDHandle led;
 
+extern adc16_config_t adc16ConfigStruct;
+extern adc16_channel_config_t adc16ChannelConfigStruct;
 
+extern QueueHandle_t adcBuffer;
+extern QueueHandle_t dspBuffer;
 
 #endif /* PES_PROJECT_6_H_ */
