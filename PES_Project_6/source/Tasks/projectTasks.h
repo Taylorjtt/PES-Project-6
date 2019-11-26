@@ -21,16 +21,8 @@
 #include <stdint.h>
 #include "fsl_debug_console.h"
 #include "fsl_dac.h"
-extern float floatWave[50];
-extern uint16_t intWave[50];
-typedef struct timestamp
-{
-	uint32_t hours;
-	uint32_t minutes;
-	uint32_t seconds;
-	uint32_t tenths;
-}timestamp;
-extern  timestamp time;
+#include "PES_Project_6.h"
+
 void updateTime(void *p);
 void updateDAC(void *p);
 

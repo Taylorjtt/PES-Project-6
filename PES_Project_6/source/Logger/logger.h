@@ -25,7 +25,14 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "util.h"
-#include <Tasks/projectTasks.h>
+typedef struct timestamp
+{
+	uint32_t hours;
+	uint32_t minutes;
+	uint32_t seconds;
+	uint32_t tenths;
+}timestamp;
+extern  timestamp time;
 #ifdef FREEDOM
 #include "fsl_debug_console.h"
 #endif

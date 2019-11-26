@@ -52,6 +52,8 @@
 #define M_TWO_PI (2*M_PI)
 #define PERIOD 5.0f
 #define Y_OFFSET 2.0f
+extern float floatWave[50];
+extern uint16_t intWave[50];
 
 extern LoggerHandle logger;
 extern RGBLEDHandle led;

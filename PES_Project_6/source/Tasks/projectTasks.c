@@ -45,7 +45,7 @@ void updateTime(void *p)
 				}
 			}
 		}
-		PRINTF("%d:%d:%d.%d\n\r",time.hours,time.minutes,time.seconds,time.tenths);
+	//	PRINTF("%d:%d:%d.%d\n\r",time.hours,time.minutes,time.seconds,time.tenths);
 		vTaskDelay(100);
 	}
 }
@@ -54,11 +54,16 @@ void updateDAC(void *p)
 {
 	while(true)
 	{
+		RGBLED_set(led, false, false, !RGBLED_isBlueOn(led));
 		DAC_SetBufferValue(DAC0, 0U, intWave[i++]);
 		if(i > 49)
 		{
 			i = 0;
 		}
+		#ifdef DB
+		Logger_logString(logger, "Updating DAC", "updateDAC", DEBUG_LEVEL);
+		PRINTF("X Value: %d\tY Value: %d\n\r",i,intWave[i - 1]);
+		#endif
 		vTaskDelay(100);
 	}
 

@@ -78,6 +78,11 @@ RGBLEDHandle RGBLED_Constructor(void *pmemory, const size_t numbytes)
 	return handle;
 }
 #endif
+bool RGBLED_isBlueOn(RGBLEDHandle handle)
+{
+	RGBLEDObject *obj = (RGBLEDObject *)handle;
+	return obj->blue;
+}
 void RGBLED_printStatus(RGBLEDHandle handle, bool red, bool green, bool blue)
 {
 	RGBLEDObject *obj = (RGBLEDObject *)handle;
