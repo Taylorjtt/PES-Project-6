@@ -124,12 +124,12 @@ int main(void) {
 
 
 
-	xTaskCreate(updateTime,( portCHAR *)"update_time", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+	xTaskCreate(updateTime,( portCHAR *)"update_time", configMINIMAL_STACK_SIZE, NULL, 3, NULL);
 
 	xTaskCreate(updateDAC,( portCHAR *)"update_dac", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
 
 #ifdef APPLICATION
-	xTaskCreate(readADC,( portCHAR *)"read_adc", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+	xTaskCreate(readADC,( portCHAR *)"read_adc", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
 #endif
 	vTaskStartScheduler();
 
