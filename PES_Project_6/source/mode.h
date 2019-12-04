@@ -9,5 +9,5 @@
 #define MODE_H_
 
 //#define DB
-//#define APPLICATION
+#define APPLICATION
 #endif /* MODE_H_ */
